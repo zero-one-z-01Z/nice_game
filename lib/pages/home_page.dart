@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nice_game/providers/home_video_provider.dart';
 import 'package:nice_game/providers/info_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:video_player/video_player.dart';
-import '../providers/home_video_provider.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
           width: 100.w,
           height: 100.h,
           child: video.isInitialized
-              ? VideoPlayer(video.controller)
+              ? Video(controller: video.controller, fit: BoxFit.cover)
               : const Center(child: CircularProgressIndicator()),
         ),
       ),

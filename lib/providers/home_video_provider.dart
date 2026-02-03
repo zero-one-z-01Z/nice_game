@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
 class HomeVideoProvider extends ChangeNotifier {
-  late VideoPlayerController _controller;
+  late Player player;
+  late VideoController controller;
   bool _initialized = false;
 
-  VideoPlayerController get controller => _controller;
   bool get isInitialized => _initialized;
 
   Future<void> init() async {
-    _controller = VideoPlayerController.asset('assets/start.mp4');
+    player = Player();
+    controller = VideoController(player);
 
     try {
-      await _controller.initialize();
-      await _controller.setLooping(true);
-      await _controller.play();
+      // Open the video asset
+      await player.open(Media('asset:///assets/start.mp4'));
 
+      // Loop video: replay when finished
+      player.stream.completed.listen((_) async {
+        await player.seek(Duration.zero);
+        await player.play();
+      });
+
+      await player.play();
       _initialized = true;
       notifyListeners();
     } catch (e) {
@@ -25,7 +33,7 @@ class HomeVideoProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    _controller.dispose();
+    player.dispose();
     super.dispose();
   }
 }
