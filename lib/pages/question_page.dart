@@ -41,7 +41,7 @@ class _QuestionPageState extends State<QuestionPage> {
         ),
         child: Stack(
           children: [
-            // 🎥 Background video
+            //  Background video
             SizedBox(
               width: 100.w,
               height: 100.h,
@@ -50,7 +50,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   : const SizedBox(),
             ),
 
-            // 🎨 Overlay color
+            //  Overlay color
             if (question.backgroundColor() != null)
               Container(
                 width: 100.w,
@@ -58,7 +58,7 @@ class _QuestionPageState extends State<QuestionPage> {
                 color: question.backgroundColor()!.withOpacity(0.3),
               ),
 
-            // 🧠 UI
+            //  UI
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 3.w),
               child: Column(
