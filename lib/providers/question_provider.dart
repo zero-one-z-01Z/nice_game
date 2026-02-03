@@ -5,9 +5,9 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nice_game/game_over_page.dart';
-import 'package:nice_game/navigation.dart';
-import 'package:nice_game/question_page.dart';
+import 'package:nice_game/pages/game_over_page.dart';
+import 'package:nice_game/core/navigation.dart';
+import 'package:nice_game/pages/question_page.dart';
 
 class QuestionProvider extends ChangeNotifier{
 

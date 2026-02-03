@@ -1,17 +1,14 @@
-
-
-
 import 'dart:io';
-
 import 'package:csv/csv.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:nice_game/constants.dart';
-import 'package:nice_game/info_page.dart';
-import 'package:nice_game/navigation.dart';
-import 'package:nice_game/question_provider.dart';
-import 'package:nice_game/select_gender_page.dart';
+import 'package:nice_game/pages/info_page.dart';
+import 'package:nice_game/core/navigation.dart';
+import 'package:nice_game/providers/question_provider.dart';
+import 'package:nice_game/pages/select_gender_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../core/constants.dart';
 
 class InfoProvider extends ChangeNotifier{
   TextEditingController name = TextEditingController();

@@ -1,7 +1,4 @@
-
-
 import 'package:flutter/material.dart';
-
 import 'constants.dart';
 
 void navP(className, {void Function(dynamic val)? then}){
