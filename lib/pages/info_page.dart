@@ -4,8 +4,8 @@ import 'package:nice_game/widgets/back_button_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
-
 import '../core/input_decoration.dart';
+import '../widgets/next_button.dart';
 
 class InfoPage extends StatelessWidget {
   const InfoPage({
@@ -44,6 +44,12 @@ class InfoPage extends StatelessWidget {
             _InfoInputField(keyController: keyController),
             SizedBox(height: 5.h),
             _VirtualKeyboardSection(keyController: keyController),
+            NextButton(
+  onPressed: () {
+    context.read<InfoProvider>().goToNextInput(keyController);
+  },
+),
+            SizedBox(height: 2.h),
           ],
         ),
       ),

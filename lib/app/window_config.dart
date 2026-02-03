@@ -6,8 +6,8 @@ import '../pages/home_page.dart';
 Future<void> configureWindow() async {
   WidgetsBinding.instance.addPostFrameCallback((_) async {
     await windowManager.ensureInitialized();
-    await windowManager.setFullScreen(true);
-    await windowManager.setAsFrameless();
+    // await windowManager.setFullScreen(true);
+    // await windowManager.setAsFrameless();
 
     navPARU(const HomePage());
   });

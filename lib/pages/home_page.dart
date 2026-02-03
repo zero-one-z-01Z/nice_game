@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nice_game/providers/home_video_provider.dart';
 import 'package:nice_game/providers/info_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HomeVideoProvider>().init();
     });
@@ -27,17 +27,29 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: InkWell(
-        onTap: () {
-          context.read<InfoProvider>().goToGenderPage();
-        },
-        child: SizedBox(
-          width: 100.w,
-          height: 100.h,
-          child: video.isInitialized
-              ? Video(controller: video.controller, fit: BoxFit.cover)
-              : const Center(child: CircularProgressIndicator()),
-        ),
+      body: Stack(
+        children: [
+          SizedBox.expand(
+            child: video.isInitialized
+                ? Video(
+                    controller: video.controller,
+                    fit: BoxFit.cover,
+                  )
+                : const Center(child: CircularProgressIndicator()),
+          ),
+          // Transparent layer to capture clicks
+          Positioned.fill(
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  context.read<InfoProvider>().goToGenderPage();
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
