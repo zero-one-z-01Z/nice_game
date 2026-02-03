@@ -35,7 +35,7 @@ class _QuestionPageState extends State<QuestionPage> {
         height: 100.h,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/main_image.png'),
+            image: AssetImage('assets/background.jpeg'),
             fit: BoxFit.fill,
           ),
         ),

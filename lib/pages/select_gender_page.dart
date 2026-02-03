@@ -15,7 +15,7 @@ class SelectGenderPage extends StatelessWidget {
         child: DecoratedBox(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/main_image.png'),
+              image: AssetImage('assets/background.jpeg'),
               fit: BoxFit.fill,
             ),
           ),
