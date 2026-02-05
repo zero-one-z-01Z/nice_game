@@ -1,3 +1,39 @@
-question1:answer1,answer2,answer3,answer4->answer1
-question2:answer1,answer2,answer3,answer4->answer2
-question3:answer1,answer2,answer3,answer4->answer3
+final List<Map<String, dynamic>> questions = [
+  {
+    'id': 'tiktok_live',
+    'question': 'Are you interested in TikTok LIVE?',
+    'type': 'yes_no',
+    'user_answer': null,
+  },
+  {
+    'id': 'commercial_registration',
+    'question': 'Do you have valid commercial Registration?',
+    'type': 'yes_no',
+    'user_answer': null,
+  },
+  {
+    'id': 'marketing',
+    'question':
+        'Are you into Social Media, Marketing, PR, Influencers Marketing?',
+    'type': 'yes_no',
+    'user_answer': null,
+  },
+  {
+    'id': 'full_name',
+    'question': 'What’s your Full Name?',
+    'type': 'text',
+    'user_answer': null,
+  },
+  {
+    'id': 'mobile',
+    'question': 'What’s your Mobile Number?',
+    'type': 'text',
+    'user_answer': null,
+  },
+  {
+    'id': 'email',
+    'question': 'What’s your Email Address?',
+    'type': 'text',
+    'user_answer': null,
+  },
+];

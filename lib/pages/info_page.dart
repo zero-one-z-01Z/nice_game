@@ -27,7 +27,7 @@ class InfoPage extends StatelessWidget {
         height: 100.h,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/background.jpeg'),
+            image: AssetImage('assets/main_image.jpeg'),
             fit: BoxFit.fill,
           ),
         ),
@@ -146,7 +146,9 @@ class _VirtualKeyboardSection extends StatelessWidget {
                   provider.goToNextInput(keyController);
                 }
                 if (keyController == 'phone') {
-                  provider.rebuild();
+                  provider.textEditingController(keyController).text =
+                      provider.textEditingController(keyController).text
+                          .replaceAll(RegExp(r'[^0-9]'), '');
                 }
               },
             ),
