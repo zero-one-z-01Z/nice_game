@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:nice_game/providers/question_provider.dart';
+import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 class QuestionPage extends StatelessWidget {
   const QuestionPage({super.key});
@@ -29,7 +30,8 @@ class QuestionPage extends StatelessWidget {
               // Progress
               Text(
                 '${q.index + 1} / ${q.questions.length}',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 4.h),
 
@@ -44,7 +46,8 @@ class QuestionPage extends StatelessWidget {
                 child: Text(
                   q.question['question'],
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ),
 
@@ -64,8 +67,27 @@ class QuestionPage extends StatelessWidget {
   }
 }
 
-class _AnswerSection extends StatelessWidget {
+class _AnswerSection extends StatefulWidget {
   const _AnswerSection();
+
+  @override
+  State<_AnswerSection> createState() => _AnswerSectionState();
+}
+
+class _AnswerSectionState extends State<_AnswerSection> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,21 +115,77 @@ class _AnswerSection extends StatelessWidget {
       );
     }
 
-    final controller = TextEditingController();
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        TextField(
-          controller: controller,
-          decoration: const InputDecoration(border: OutlineInputBorder()),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: TextField(
+            controller: _controller,
+            readOnly: true,
+            showCursor: true,
+            autofocus: true,
+            style: const TextStyle(fontSize: 18),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: 'Type your answer here...',
+            ),
+          ),
         ),
-        SizedBox(height: 3.h),
+        SizedBox(height: 2.h),
+        // Virtual Keyboard
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: VirtualKeyboard(
+              height: 22.h,
+              width: 90.w,
+              textColor: Colors.white,
+              fontSize: 18,
+              textController: _controller,
+              type: q.index == 4 // Mobile Number index
+                  ? VirtualKeyboardType.Numeric
+                  : VirtualKeyboardType.Alphanumeric,
+              defaultLayouts: q.index == 4
+                  ? [VirtualKeyboardDefaultLayouts.English]
+                  : [
+                      VirtualKeyboardDefaultLayouts.English,
+                      VirtualKeyboardDefaultLayouts.Arabic,
+                    ],
+              postKeyPress: (val) {
+                if (val.action == VirtualKeyboardKeyAction.Return) {
+                  if (_controller.text.trim().isNotEmpty) {
+                    q.setAnswer(_controller.text.trim());
+                    _controller.clear();
+                    q.next();
+                  }
+                }
+              },
+            ),
+          ),
+        ),
+        SizedBox(height: 2.h),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 2.h),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          ),
           onPressed: () {
-            q.setAnswer(controller.text);
+            if (_controller.text.trim().isEmpty) return;
+            q.setAnswer(_controller.text.trim());
+            _controller.clear();
             q.next();
           },
-          child: const Text('Next'),
+          child: const Text('Next', style: TextStyle(fontSize: 20)),
         ),
       ],
     );
@@ -144,7 +222,8 @@ class _PlayAgainButton extends StatelessWidget {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 3.h),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
           ),
           onPressed: q.restartApp,
           child: const Text(

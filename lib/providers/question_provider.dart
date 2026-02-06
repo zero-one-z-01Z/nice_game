@@ -12,9 +12,33 @@ class QuestionProvider extends ChangeNotifier {
 
   // Questions
   final List<Map<String, dynamic>> questions = [
-    {'question': 'Are you interested in TikTok LIVE?', 'type': 'yes_no', 'user_answer': null},
-    {'question': 'Do you have valid commercial Registration?', 'type': 'yes_no', 'user_answer': null},
-    {'question': 'Are you into Social Media, Marketing, PR, Influencers Marketing?', 'type': 'yes_no', 'user_answer': null},
+    {
+      'question': 'Are you interested in TikTok LIVE?',
+      'type': 'yes_no',
+      'user_answer': null
+    },
+    {
+      'question': 'Do you have valid commercial Registration?',
+      'type': 'yes_no',
+      'user_answer': null
+    },
+    {
+      'question':
+          'Are you into Social Media, Marketing, PR, Influencers Marketing?',
+      'type': 'yes_no',
+      'user_answer': null
+    },
+    {'question': 'What’s your Full Name?', 'type': 'fill', 'user_answer': null},
+    {
+      'question': 'What’s your Mobile Number?',
+      'type': 'fill',
+      'user_answer': null
+    },
+    {
+      'question': 'What’s your Email Address?',
+      'type': 'fill',
+      'user_answer': null
+    },
   ];
 
   bool get isLastQuestion => index == questions.length - 1;
@@ -42,12 +66,11 @@ class QuestionProvider extends ChangeNotifier {
       index++;
       notifyListeners();
     } else {
-      // Save answers into the single CSV
+      // Save all answers into the single CSV
       final answers =
           questions.map((q) => q['user_answer']?.toString() ?? '').toList();
-      final infoProvider =
-          Constants.globalContext().read<InfoProvider>();
-      infoProvider.updateCsvAnswers(answers);
+      final infoProvider = Constants.globalContext().read<InfoProvider>();
+      infoProvider.saveAllAnswers(answers);
     }
   }
 

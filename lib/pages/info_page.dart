@@ -45,10 +45,10 @@ class InfoPage extends StatelessWidget {
             SizedBox(height: 5.h),
             _VirtualKeyboardSection(keyController: keyController),
             NextButton(
-  onPressed: () {
-    context.read<InfoProvider>().goToNextInput(keyController);
-  },
-),
+              onPressed: () {
+                context.read<InfoProvider>().goToNextInput(keyController);
+              },
+            ),
             SizedBox(height: 2.h),
           ],
         ),
@@ -56,6 +56,7 @@ class InfoPage extends StatelessWidget {
     );
   }
 }
+
 class _Header extends StatelessWidget {
   const _Header({required this.image});
   final String image;
@@ -76,8 +77,6 @@ class _Header extends StatelessWidget {
   }
 }
 
-
-
 class _InfoInputField extends StatelessWidget {
   const _InfoInputField({required this.keyController});
   final String keyController;
@@ -92,6 +91,8 @@ class _InfoInputField extends StatelessWidget {
 
           return TextFormField(
             controller: controller,
+            readOnly: true, // Prevents system keyboard
+            showCursor: true, // Still shows the cursor
             autofocus: true,
             cursorHeight: 25,
             cursorColor: Colors.black,
@@ -130,8 +131,7 @@ class _VirtualKeyboardSection extends StatelessWidget {
               width: 90.w,
               textColor: Colors.white,
               fontSize: 20,
-              textController:
-                  provider.textEditingController(keyController),
+              textController: provider.textEditingController(keyController),
               type: keyController == 'phone'
                   ? VirtualKeyboardType.Numeric
                   : VirtualKeyboardType.Alphanumeric,
@@ -146,9 +146,10 @@ class _VirtualKeyboardSection extends StatelessWidget {
                   provider.goToNextInput(keyController);
                 }
                 if (keyController == 'phone') {
-                  provider.textEditingController(keyController).text =
-                      provider.textEditingController(keyController).text
-                          .replaceAll(RegExp(r'[^0-9]'), '');
+                  provider.textEditingController(keyController).text = provider
+                      .textEditingController(keyController)
+                      .text
+                      .replaceAll(RegExp(r'[^0-9]'), '');
                 }
               },
             ),
@@ -158,7 +159,3 @@ class _VirtualKeyboardSection extends StatelessWidget {
     );
   }
 }
-
-
-
-

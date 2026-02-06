@@ -1,13 +1,12 @@
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:nice_game/pages/info_page.dart';
-import 'package:nice_game/pages/select_gender_page.dart';
 import 'package:nice_game/providers/question_provider.dart';
-import 'package:nice_game/core/navigation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import '../core/constants.dart';
+import '../core/navigation.dart';
+import '../pages/info_page.dart';
 
 class InfoProvider extends ChangeNotifier {
   TextEditingController name = TextEditingController();
@@ -17,6 +16,34 @@ class InfoProvider extends ChangeNotifier {
   TextEditingController email = TextEditingController();
 
   bool male = false;
+
+  void goToInfoPage(bool isMale) {
+    male = isMale;
+    navP(InfoPage(
+      image: 'assets/image1.png',
+      title: 'Enter your Full Name',
+      keyController: 'name',
+    ));
+    notifyListeners();
+  }
+
+  void goToNextInput(String currentKey) {
+    if (currentKey == 'name') {
+      navP(InfoPage(
+        image: 'assets/image1.png',
+        title: 'Enter your Mobile Number',
+        keyController: 'phone',
+      ));
+    } else if (currentKey == 'phone') {
+      navP(InfoPage(
+        image: 'assets/image1.png',
+        title: 'Enter your Email Address',
+        keyController: 'email',
+      ));
+    } else if (currentKey == 'email') {
+      goToFirstQuestion();
+    }
+  }
 
   TextEditingController textEditingController(String key) {
     switch (key) {
@@ -42,48 +69,12 @@ class InfoProvider extends ChangeNotifier {
     email.clear();
   }
 
-  void goToGenderPage() {
+  void goToFirstQuestion() {
     clear();
-    navP(const SelectGenderPage());
-  }
-
-  void goToInfoPage(bool male) {
-    this.male = male;
-    navP(const InfoPage(
-      image: 'assets/image2.png',
-      title: 'Enter Your Name',
-      keyController: 'name',
-    ));
-  }
-
-  void goToNextInput(String keyController) {
-    if (keyController == 'name') {
-      navP(const InfoPage(
-        image: 'assets/image3.png',
-        title: 'Enter Your Address',
-        keyController: 'address',
-      ));
-    } else if (keyController == 'address') {
-      navP(const InfoPage(
-        image: 'assets/image4.png',
-        title: 'Enter Your Organization',
-        keyController: 'organization',
-      ));
-    } else if (keyController == 'organization') {
-      navP(const InfoPage(
-        image: 'assets/image5.png',
-        title: 'Enter Your Phone',
-        keyController: 'phone',
-      ));
-    } else if (keyController == 'phone') {
-      navP(const InfoPage(
-        image: 'assets/image5.png',
-        title: 'Enter Your Email',
-        keyController: 'email',
-      ));
-    } else {
-      startGame();
-    }
+    Provider.of<QuestionProvider>(
+      Constants.globalContext(),
+      listen: false,
+    ).goToQuestionPage();
   }
 
   /// ---------------- CSV ----------------
@@ -97,16 +88,13 @@ class InfoProvider extends ChangeNotifier {
     if (!await file.exists()) {
       return [
         [
-          "Name",
-          "Gender",
-          "Address",
-          "Phone",
-          "Email",
-          "Organization",
-          "Q1",
-          "Q2",
-          "Q3"
-        ] // Add as many Q columns as you have questions
+          "TikTok LIVE",
+          "Commercial Registration",
+          "Marketing/PR",
+          "Full Name",
+          "Mobile Number",
+          "Email Address"
+        ]
       ];
     }
 
@@ -114,43 +102,10 @@ class InfoProvider extends ChangeNotifier {
     return const CsvToListConverter().convert(csvData);
   }
 
-  Future<void> startGame() async {
-    // Save info + go to QuestionPage
+  /// Save all answers at once
+  Future<void> saveAllAnswers(List<String> answers) async {
     final csvData = await _readCsv();
-
-    // Append empty answers for now
-    final row = [
-      name.text.trim(),
-      male ? "Male" : "Female",
-      address.text.trim(),
-      phone.text.trim(),
-      email.text.trim(),
-      organization.text.trim(),
-      '', // Q1
-      '', // Q2
-      '', // Q3
-    ];
-
-    csvData.add(row);
-    await File(await _csvPath())
-        .writeAsString(const ListToCsvConverter().convert(csvData));
-
-    Provider.of<QuestionProvider>(
-      Constants.globalContext(),
-      listen: false,
-    ).goToQuestionPage();
-  }
-
-  /// Update the last row with question answers
-  Future<void> updateCsvAnswers(List<String> answers) async {
-    final csvData = await _readCsv();
-    if (csvData.length < 2) return; // nothing to update
-
-    // last row is the current user
-    for (int i = 0; i < answers.length; i++) {
-      csvData.last[6 + i] = answers[i]; // Q1 starts at index 6
-    }
-
+    csvData.add(answers);
     await File(await _csvPath())
         .writeAsString(const ListToCsvConverter().convert(csvData));
   }

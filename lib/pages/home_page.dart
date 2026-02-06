@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
-                  context.read<InfoProvider>().goToGenderPage();
+                  context.read<InfoProvider>().goToFirstQuestion();
                 },
               ),
             ),
